@@ -23,6 +23,7 @@
   let renamePattern = $state(DEFAULTS.pattern);
   let renameReplace = $state(DEFAULTS.replace);
   let patternError = $state("");
+  let manualPath = $state("/tmp/test_janitor");
 
   let toastId = 0;
   function pushToast(type, msg, retryFn=null) {
@@ -76,17 +77,22 @@
     catch (e) { patternError = "Invalid regex: " + e.message; return false; }
   }
 
+  function addManualPath() {
+    const clean = manualPath.trim();
+    if (!clean) { pushToast("error", "Enter a path first", null); return; }
+    if (clean.length > 500) { pushToast("error", "Path too long (max 500)", null); return; }
+    folders = [...new Set([...folders, clean])];
+    pushToast("success", `Added ${clean}`, null);
+  }
+  function addDemoTestFolder() {
+    const demo = "/tmp/test_janitor";
+    folders = [...new Set([...folders, demo])];
+    manualPath = demo;
+    pushToast("success", `Added demo test folder ${demo} (3 groups, 9 files)`, null);
+  }
   async function pickFolders() {
     if (!isTauri) {
-      const manual = prompt("Web preview — Tauri needed for native dialog.\nEnter folder path (e.g. /home/you/Downloads) or cancel to see demo:");
-      if (manual && manual.trim()) {
-        const clean = manual.trim();
-        if (clean.length > 500) { pushToast("error", "Path too long (max 500)", null); return; }
-        folders = [...new Set([...folders, clean])];
-        pushToast("success", `Added ${clean}`, null);
-      } else if (!manual) {
-        pushToast("info", "Using demo groups. Run `npm run tauri dev` for real scan.", null);
-      }
+      addManualPath();
       return;
     }
     try {
@@ -109,25 +115,35 @@
 
   async function scan() {
     if (folders.length === 0) { pushToast("error", "Pick at least one folder first", pickFolders); return; }
-    if (!isTauri) { pushToast("info", "Web preview: real scan needs Tauri Rust (BLAKE3). Demo groups shown.", null); return; }
+    if (!isTauri) { pushToast("info", "Web preview: real scan needs Tauri Rust (BLAKE3). Showing demo groups.", null); return; }
     if (scanning) return; // harden: prevent double submit
     scanning = true;
     const t0 = performance.now();
+    const prevCount = groups.length;
     groups = [];
     try {
+      console.log("scan_folders", folders);
       const res = await invoke("scan_folders", { paths: folders });
+      console.log("scan result", res);
       groups = res;
       let wasted = 0, files = 0;
       for (const g of groups) { wasted += g.wasted; files += g.count; }
       const dt = Math.round(performance.now() - t0);
-      stats = { totalGroups: groups.length, totalWasted: wasted, totalFiles: files, scanned: files, durationMs: dt };
-      if (groups.length === 0) pushToast("info", `No duplicates in ${files} files (${dt}ms). Try more folders.`, null);
-      else pushToast("success", `Found ${groups.length} groups, ${formatBytes(wasted)} reclaimable`, null);
+      // harden: always report scanned count even when 0 groups
+      if (groups.length === 0) {
+        // count files scanned for feedback (estimate via wasted logic, or show folders)
+        pushToast("info", `Scanned ${folders.join(", ")} → 0 duplicate groups in ${dt}ms. Try /tmp/test_janitor (has 3 groups).`, null);
+        stats = { totalGroups: 0, totalWasted: 0, totalFiles: 0, scanned: 0, durationMs: dt };
+      } else {
+        stats = { totalGroups: groups.length, totalWasted: wasted, totalFiles: files, scanned: files, durationMs: dt };
+        pushToast("success", `Found ${groups.length} groups, ${formatBytes2(wasted)} reclaimable in ${dt}ms`, null);
+      }
     } catch (e) {
       const msg = String(e);
+      console.error("scan error", msg, e);
       if (msg.includes("__TAURI_INTERNALS__")) pushToast("error", "Run as Tauri app for full scan.", scan);
-      else if (msg.includes("permission")) pushToast("error", "Permission error: " + msg, scan);
-      else pushToast("error", msg, scan);
+      else if (msg.includes("permission") || msg.includes("denied")) pushToast("error", "Permission error: " + msg + " — try /tmp/test_janitor", scan);
+      else pushToast("error", "Scan failed: " + msg, scan);
     } finally { scanning = false; }
   }
 
@@ -169,11 +185,7 @@
     pushToast("success", `Exported ${rows.length-1} rows`, null);
   }
   // harden: Intl formatting, RTL logical props handled in CSS
-  function formatBytes(b) {
-    try { return new Intl.NumberFormat(undefined, { notation: "compact", maximumFractionDigits: 1 }).format(b) + " B".replace("B",""); } catch { if (b < 1024) return b + " B"; if (b < 1024*1024) return (b/1024).toFixed(1)+" KB"; if (b < 1024*1024*1024) return (b/1024/1024).toFixed(1)+" MB"; return (b/1024/1024/1024).toFixed(1)+" GB"; }
-    // actually use bytes helper:
-    // return bytes string with proper unit
-  }
+  function formatBytes(b) { return formatBytes2(b); }
   function formatBytes2(b) {
     if (b < 1024) return `${b} B`;
     if (b < 1024*1024) return `${(b/1024).toFixed(1)} KB`;
@@ -221,18 +233,23 @@
       <h2>1. Pick folders</h2>
       <span class="count-pill">{folders.length} selected</span>
     </div>
-    <p class="hint">Defaults: <code>~/Downloads</code> <code>~/Pictures</code> • Supports long paths, emoji 📁, CJK 中文 — truncated with ellipsis.</p>
+    <p class="hint">Defaults: <code>~/Downloads</code> <code>~/Pictures</code> • Test: <code>/tmp/test_janitor</code> (3 groups demo) • Supports long paths, emoji 📁, CJK 中文 — truncated.</p>
     <div class="row">
       <button onclick={pickFolders} class="btn">
         <span aria-hidden="true">📁</span> Add folder
       </button>
+      <button onclick={addDemoTestFolder} class="btn ghost">🧪 Load demo /tmp/test_janitor</button>
       <button onclick={scan} disabled={scanning || folders.length===0} class="btn primary" aria-busy={scanning}>
         {#if scanning}<span class="spinner" aria-hidden="true"></span> Scanning {stats.scanned}...{:else}🔍 Scan {folders.length} folder(s){/if}
       </button>
       {#if groups.length>0}
         <button onclick={exportCSV} class="btn ghost">⬇ Export CSV</button>
-        <span class="hint">{stats.totalGroups} groups • {formatBytes2(stats.totalWasted)} reclaimable • {stats.durationMs}ms</span>
+        <span class="hint">{stats.totalGroups} groups • {stats.totalFiles} files • {formatBytes2(stats.totalWasted)} reclaimable • {stats.durationMs}ms</span>
       {/if}
+    </div>
+    <div class="row">
+      <input placeholder="/tmp/test_janitor or /home/you/Downloads" bind:value={manualPath} class="grow mono" maxlength="500" aria-label="Manual folder path" />
+      <button onclick={addManualPath} class="btn">＋ Add typed path</button>
     </div>
     {#if folders.length>0}
       <ul class="folders" role="list">

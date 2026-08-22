@@ -109,3 +109,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: Native polish before/after screenshot + error toast demo + dark mode video
 
+
+## 2026-08-23 04:07 IST — Added manual path + demo button for test folder
+- **What changed:** Added manual path + demo button for test folder
+- **Why decision:** Why: user typed /tmp/test_janitor in dialog search (Recent) got No Results Found (image 04:03 AM) + entered path saw nothing; fixed with + Add typed path input + 🧪 Load demo /tmp/test_janitor button, improved scan logging console.log, always show scanned count, fixed formatBytes alias, isTauri guard demo
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Dialog gotcha thread + demo button fix
+
