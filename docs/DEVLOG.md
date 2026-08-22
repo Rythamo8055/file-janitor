@@ -102,3 +102,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: This fix screenshot + dark mode demo
 
+
+## 2026-08-23 03:55 IST — Impeccable native polish + harden + error handling + defaults
+- **What changed:** Impeccable native polish + harden + error handling + defaults
+- **Why decision:** Why: user asked npx impeccable install to make UI native + error handling + defaults; applied impeccable 243.7K harden (toasts retry, Intl, truncate, min-width 0, empty/loading states, validation maxlength 200/500, RTL logical props, confirm dialog) + polish native GNOME Adwaita (Cantarell, headerbar, 12-16px radii, offset+blur shadows, craft-floor spacing), defaults ~/Downloads/pattern (.*) \(1\) ; npx impeccable detect 0 anti-patterns (was Inter overused), svelte-check 0, vite build 132KB
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Native polish before/after screenshot + error toast demo + dark mode video
+
