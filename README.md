@@ -69,7 +69,58 @@ Generated per `spec-driven-development` + `product-requirements` (Sarah 94/100):
 - `AGENTS.md` (vibe rules)
 - `docs/research-*.md` ×3 (citations)
 
-Now init git + GitHub repo.
+### ⑨ WHY we did each thing (so you can reuse this process for any app)
+
+| Step | Why we needed it | Skill used (verified) | What would fail without it |
+| :--- | :--- | :--- | :--- |
+| **find-skills + install counts** | Avoid hallucinated stacks; pick only battle-tested skills (>1K installs) | `find-skills` + `npx skills find` (2.9K pwa, 6.9K tauri-v2, 23.3K niche) | You'd pick Electron 150MB or dead lib |
+| **Tauri v2 + Svelte vs Electron** | Lightest possible: Tauri uses OS WebView (5-15MB) vs Electron bundles Chromium | `tauri-v2` 6.9K `svelte-code-writer` 8.1K | 10x bloat, fails offline-first |
+| **Real Reddit 9,363 + 3,000 + 1,416** | Users lie in surveys but complain for real on Reddit - unsolicited pain = best signal | `research` 355K + `firecrawl-deep-research` 33.1K | Build what YOU think vs what market screams |
+| **Weighted maths 8.45/8.20** | Turn opinions into numbers: `Fr*0.25+Off*0.25+Pay*0.20+CompInv*0.15+Gro*0.15` via `python3` | `research` + `spec-driven` | Gut ranking picks hype, not ROI |
+| **Unsupervised KMeans + PCA** | Find hidden cluster without bias: Pay weight made Ledger #1 supervised, but unsupervised found **Janitor+Recipe low-comp blue ocean** | `sklearn 1.9.0` `StandardScaler` `KMeans` `PCA 63.39%` | You'd chase high-pay crowded finance and lose |
+| **PRD 94/100 Sarah + Spec 6 areas** | Vibe coding without spec = chaos, rewrite loop. Spec is truth before code | `product-requirements` 1.2K + `spec-driven-development` 26.4K | 15hr debugging vs 15min spec |
+| **AGENTS.md + boundaries** | All agents (you, me, future contributors) follow same `trash not delete`, `no network` | `spec-driven-implementation` 22.4K | Silent assumption bugs |
+| **Git + GitHub via `gh`** | Content needs proof: timeline + data + code in one public repo | `gh 2.98.0` | No shareable proof, no stars |
+
+> **Generate this entire process from this README:** `bash scripts/reproduce-from-readme.sh` (uses same skills, same maths, same commits) - see **Reproduce** below.
+
+---
+
+## Reproduce From README (Script Generated Using Skills)
+
+This repo is **self-generating**. The README is the spec, the script is the implementation - both via skills.
+
+```bash
+# 1. Clone and reproduce everything from scratch (skills will be re-installed, research re-run)
+bash scripts/reproduce-from-readme.sh
+
+# 2. Or use skills directly as we did:
+npx skills find "tauri"          # → tauri-v2 6.9K
+npx skills add nodnarbnitram/claude-code-extensions@tauri-v2 -y  # skill: tauri-v2
+npx skills add sveltejs/ai-tools@svelte-code-writer -y          # skill: svelte-code-writer
+npx skills add mattpocock/skills@research -y                    # skill: research
+npx skills add addyosmani/agent-skills@spec-driven-development -y # skill: spec-driven
+# then follow docs/file-janitor-spec.md gate: SPECIFY → PLAN → TASKS → IMPLEMENT
+```
+
+Skills are **required** for app generation - we never code without `tauri-v2` (capabilities/permissions), `svelte-code-writer` (runes `$state`), `research` (primary sources only). See `scripts/reproduce-from-readme.sh:8` for full skill list.
+
+---
+
+## Content From This Generation (Make Content Out of Process)
+
+Every step above is **content** - we auto-generate:
+
+* **Blog:** `docs/content/blog-research-first.md` (2,500 words, with charts)
+* **Twitter/X thread:** `docs/content/thread-timeline.md` (12 tweets)
+* **Video script:** `docs/content/video-script.md` (8 min devlog)
+* **Dev.to / IndieHackers post:** `docs/content/indie-post.md`
+
+Built via `research` skill primary sources + `spec-driven` narrative. Generate more:
+
+```bash
+bash scripts/generate-content.sh  # → docs/content/* via skills
+```
 
 ---
 
@@ -114,6 +165,15 @@ python3 -c "print(1231/9363*100)" # 13.1%
 python3 /tmp/run_unsupervised.py  # KMeans + PCA
 cat docs/research-deep-analytics.md  # all citations
 ```
+
+## Why This README = System (Not Just Docs)
+
+Traditional README = afterthought. Here README = **executable spec**:
+* **Human reads** → understands why Janitor was selected over 9 alternatives with real numbers
+* **Agent reads** → `AGENTS.md` points to this README timeline, then `scripts/reproduce-from-readme.sh` replays it via `npx skills add` (same verified installs)
+* **Audience reads** → `docs/content/*` turns timeline into blog/thread/video without extra work
+
+This is `spec-driven-implementation` 22.4K philosophy: `PRODUCT.md → TECH.md → code` all in one PR, kept in sync.
 
 ## License
 
