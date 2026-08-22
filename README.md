@@ -175,6 +175,23 @@ Traditional README = afterthought. Here README = **executable spec**:
 
 This is `spec-driven-implementation` 22.4K philosophy: `PRODUCT.md → TECH.md → code` all in one PR, kept in sync.
 
+## Live Dev Log (Auto-Updated From Convo — Never Out of Content)
+
+Every progress entry below is **timestamped from our convo** + what changed + why decision, via `scripts/log-progress.sh` (skill `spec-driven`). This log **auto-generates** blog/thread/video/linkedin via `scripts/generate-content-from-convo.sh` so we never run out.
+
+*Full journal:* `docs/DEVLOG.md` (8 entries since 02:22 IST)
+
+| When (IST) | What Changed | Why Decision (Real Data) | Content Made |
+| :--- | :--- | :--- | :--- |
+| 2026-08-23 03:18 | WHY table + scripts/reproduce + 4 content files | README = executable spec per `spec-driven-implementation` 22.4K | `blog-research-first.md` `thread-timeline.md` |
+| 2026-08-23 03:11 | PRD 94/100 + Spec 6 areas + `gh repo create` | Spec is truth before code | — |
+| 2026-08-23 03:08 | Unsupervised KMeans 8.22 winner | Pay vs CompInv trade-off PC1 41% | Video 4:30 script |
+| 2026-08-23 02:58 | Weighted 8.45 vs 8.20 | python3 real maths | Blog weighted table |
+| 2026-08-23 03:26 IST | Setup timestamped DEVLOG engine | Why: user asked to never be out of content; spec-driven says log decision + time from convo so README becomes journal | Content: This thread itself |
+| ... | ... | ... | ... |
+
+> **Next logs auto-append here.** Run `bash scripts/log-progress.sh "title" "why" "content hook"` after every code change. See `docs/DEVLOG.md` for full format.
+
 ## License
 
 MIT

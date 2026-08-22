@@ -55,3 +55,14 @@ This blog was generated FROM the README timeline via `research` skill primary so
 
 *Built 2026-08-23 on Fedora 44, Node 24, Rust 1.98.*
 
+
+---
+
+## Update 2026-08-23 03:26 IST — From Convo Log
+
+*Logged change:* ## 2026-08-23 03:26 IST — Setup timestamped DEVLOG engine
+*Total devlog entries:* 12
+*Source:* docs/DEVLOG.md + README Live Dev Log (time/day stamped)
+
+This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
+
