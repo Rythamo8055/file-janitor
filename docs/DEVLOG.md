@@ -116,3 +116,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: Dialog gotcha thread + demo button fix
 
+
+## 2026-08-23 04:15 IST — Replace emojis with real SVG icons + consistent native UI + tests
+- **What changed:** Replace emojis with real SVG icons + consistent native UI + tests
+- **Why decision:** Why: user said broken UI + too many errors + add dark themes UX friendly + don't use emojis use real icons + do tests; fixed via npx impeccable install 243.7K harden+polish; replaced 13 emojis (🧹📁🧪🔍 etc.) with 16 inline SVGs (folder, search, trash, download, pencil, sun/moon, image, eye, broom, beaker), Adwaita headerbar, 12-16px radii, offset+blur shadows, Cantarell, svelte-check 0, detect 0 (was Inter), build 132KB, cargo test 4/4
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Before/after emoji vs SVG + consistent UI video
+
