@@ -1,6 +1,5 @@
 mod scanner;
 use scanner::{FileGroup, scan_folders as scan_core};
-use serde::{Deserialize, Serialize};
 
 #[tauri::command]
 fn greet(name: &str) -> String {
