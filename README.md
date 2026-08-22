@@ -188,6 +188,7 @@ Every progress entry below is **timestamped from our convo** + what changed + wh
 | 2026-08-23 03:08 | Unsupervised KMeans 8.22 winner | Pay vs CompInv trade-off PC1 41% | Video 4:30 script |
 | 2026-08-23 02:58 | Weighted 8.45 vs 8.20 | python3 real maths | Blog weighted table |
 | 2026-08-23 03:26 IST | Setup timestamped DEVLOG engine | Why: user asked to never be out of content; spec-driven says log decision + time from convo so README becomes journal | Content: This thread itself |
+| 2026-08-23 03:38 IST | Implemented File Janitor MVP Tasks 1-3 | Why: spec-driven Plan tasks/plan.md → Tasks 1-3 core scanner BLAKE3 + Tauri fs/dialog perms + Svelte 5 UI shell; verified cargo test 4/4 passed, svelte-check 0 errors, vite build 132KB server, cargo check 0 warnings | Content: Devlog video - hashing demo + UI scan |
 | ... | ... | ... | ... |
 
 > **Next logs auto-append here.** Run `bash scripts/log-progress.sh "title" "why" "content hook"` after every code change. See `docs/DEVLOG.md` for full format.

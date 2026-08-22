@@ -88,3 +88,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: This thread itself
 
+
+## 2026-08-23 03:38 IST — Implemented File Janitor MVP Tasks 1-3
+- **What changed:** Implemented File Janitor MVP Tasks 1-3
+- **Why decision:** Why: spec-driven Plan tasks/plan.md → Tasks 1-3 core scanner BLAKE3 + Tauri fs/dialog perms + Svelte 5 UI shell; verified cargo test 4/4 passed, svelte-check 0 errors, vite build 132KB server, cargo check 0 warnings
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Devlog video - hashing demo + UI scan
+

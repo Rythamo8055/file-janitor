@@ -66,3 +66,14 @@ This blog was generated FROM the README timeline via `research` skill primary so
 
 This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
 
+
+---
+
+## Update 2026-08-23 03:38 IST — From Convo Log
+
+*Logged change:* ## 2026-08-23 03:38 IST — Implemented File Janitor MVP Tasks 1-3
+*Total devlog entries:* 13
+*Source:* docs/DEVLOG.md + README Live Dev Log (time/day stamped)
+
+This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
+
