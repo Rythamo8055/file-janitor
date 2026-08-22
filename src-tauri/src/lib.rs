@@ -1,5 +1,6 @@
 mod scanner;
-use scanner::{FileGroup, scan_folders as scan_core};
+use scanner::{FileGroup, ScanProgress, scan_folders as scan_core, scan_folders_with_progress};
+use tauri::{AppHandle, Emitter};
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -7,8 +8,14 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-fn scan_folders(paths: Vec<String>) -> Result<Vec<FileGroup>, String> {
-    scan_core(paths)
+fn scan_folders(app: AppHandle, paths: Vec<String>) -> Result<Vec<FileGroup>, String> {
+    let app_clone = app.clone();
+    scan_folders_with_progress(
+        paths,
+        Some(Box::new(move |p: ScanProgress| {
+            let _ = app_clone.emit("scan-progress", &p);
+        }) as Box<dyn FnMut(ScanProgress) + Send + Sync>),
+    )
 }
 
 #[tauri::command]

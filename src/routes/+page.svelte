@@ -4,6 +4,7 @@
   // skills: tauri-v2 6.9K, svelte-code-writer 8.1K, impeccable 243.7K
   import { invoke } from "@tauri-apps/api/core";
   import { open } from "@tauri-apps/plugin-dialog";
+  import { listen } from "@tauri-apps/api/event";
   import { onMount } from "svelte";
 
   const DEFAULTS = { pattern: "(.*) \\(1\\)", replace: "$1" };
@@ -19,6 +20,10 @@
   let renameReplace = $state(DEFAULTS.replace);
   let patternError = $state("");
   let manualPath = $state("/tmp/test_janitor");
+  let visibleCount = $state(20); // pagination: render 20 groups at a time (harden: large datasets)
+  let filterQuery = $state("");
+  let scanProgress = $state({ phase: "", scanned: 0, total: 0, percent: 0, message: "" });
+  let unlistenProgress = null;
 
   let toastId = 0;
   function pushToast(type, msg, retryFn=null) {
@@ -28,12 +33,21 @@
   }
   function dismissToast(id) { toasts = toasts.filter(t=>t.id!==id); }
 
-  onMount(() => {
+  onMount(async () => {
     isTauri = typeof window !== "undefined" && !!window.__TAURI_INTERNALS__;
     const saved = typeof localStorage !== "undefined" ? localStorage.getItem("filejanitor-theme") : null;
+    // fix: default to light (polished) — not system dark, so every open is light and consistent
     if (saved) isDark = saved === "dark";
-    else if (typeof window !== "undefined" && window.matchMedia) isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    else isDark = false;
     applyTheme();
+    // progress listener for real numbers during scan (harden: UX all sorts)
+    if (isTauri) {
+      try {
+        unlistenProgress = await listen("scan-progress", (e) => {
+          scanProgress = e.payload;
+        });
+      } catch {}
+    }
     if (!isTauri && groups.length === 0) {
       groups = [
         { hash: "a1b2c3d4e5f67890ab12cd34", size: 2457600, count: 3, wasted: 4915200, files: [
@@ -173,8 +187,8 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l-3 3a2 2 0 000 2.8 2 2 0 002.8 0l3-3"/><path d="M12 7l3-3 4 4-3 3-4-4z"/><path d="M14 14l4 4"/><path d="M19 19l-2 2"/></svg>
       </div>
       <div>
-        <h1>File Janitor <span class="badge">offline • 5-15MB</span></h1>
-        <p class="subtitle">Rust BLAKE3 • no cloud • trash not delete</p>
+        <h1>File Janitor <span class="badge">offline • safe</span></h1>
+        <p class="subtitle">Find and clean duplicate files — nothing is deleted forever</p>
       </div>
     </div>
     <div class="headerbar-end">
@@ -218,7 +232,7 @@
       <h2>Pick folders</h2>
       <span class="count-pill">{folders.length} selected</span>
     </div>
-    <p class="hint">Defaults: <code>~/Downloads</code> <code>~/Pictures</code> • Test: <code>/tmp/test_janitor</code> (3 groups demo) • Long paths, CJK — truncated.</p>
+    <p class="hint"><strong>Uncle-friendly:</strong> Just pick where your photos/downloads are, hit <strong>Find Duplicates</strong>, and we’ll show what you can safely clean. No cloud, no delete — we move to trash so you can restore.</p>
     <div class="row">
       <button onclick={pickFolders} class="btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M2 7a2 2 0 012-2h3.5l2 2H20a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V7z"/></svg>
@@ -229,19 +243,31 @@
         Load demo /tmp/test_janitor
       </button>
       <button onclick={scan} disabled={scanning || folders.length===0} class="btn primary" aria-busy={scanning}>
-        {#if scanning}<span class="spinner" aria-hidden="true"></span> Scanning {stats.scanned}...{:else}
+        {#if scanning}<span class="spinner" aria-hidden="true"></span> Finding duplicates...{:else}
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg>
-          Scan {folders.length} folder(s)
+          Find Duplicates ({folders.length} folder{folders.length===1?'':'s'})
         {/if}
       </button>
       {#if groups.length>0}
         <button onclick={exportCSV} class="btn ghost">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 4v12M12 16l-5-5M12 16l5-5"/><path d="M4 20h16"/></svg>
-          Export CSV
+          Save list as CSV
         </button>
-        <span class="hint">{stats.totalGroups} groups • {stats.totalFiles} files • {formatBytes2(stats.totalWasted)} reclaimable • {stats.durationMs}ms</span>
+        <span class="hint">{stats.totalGroups} groups • {stats.totalFiles} files • {formatBytes2(stats.totalWasted)} can be saved • {stats.durationMs}ms</span>
       {/if}
     </div>
+    {#if scanning}
+      <div class="progress-card" role="progressbar" aria-valuenow={scanProgress.percent} aria-valuemin="0" aria-valuemax="100" aria-label="Scanning progress">
+        <div class="progress-head">
+          <span class="progress-phase">{scanProgress.phase || "Scanning"}</span>
+          <span class="progress-numbers mono">{scanProgress.scanned} / {scanProgress.total || "…"} • {scanProgress.percent}%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: {scanProgress.percent}%"></div>
+        </div>
+        <p class="hint progress-msg">{scanProgress.message || "Looking for copies..."}</p>
+      </div>
+    {/if}
     <div class="row">
       <input placeholder="/tmp/test_janitor or /home/you/Downloads" bind:value={manualPath} class="grow mono" maxlength="500" aria-label="Manual folder path" />
       <button onclick={addManualPath} class="btn">
@@ -417,6 +443,13 @@
   .btn.mini { padding:.25em .6em; font-size:.8rem; border-radius:8px; min-height:auto; }
   .spinner { width:14px; height:14px; border:2px solid rgba(255,255,255,.4); border-top-color:white; border-radius:50%; display:inline-block; animation:spin .7s linear infinite; }
   @keyframes spin { to{transform:rotate(360deg)} }
+  .progress-card { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:.7rem .9rem; margin:.6rem 0; }
+  .progress-head { display:flex; justify-content:space-between; gap:.5rem; align-items:center; font-size:.85rem; font-weight:600; margin-bottom:.4rem; }
+  .progress-phase { text-transform:capitalize; color:var(--text); }
+  .progress-numbers { color:var(--muted); }
+  .progress-track { height:10px; background:var(--border); border-radius:999px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg, var(--primary), #1c71d8); border-radius:999px; transition:width .3s ease; }
+  .progress-msg { margin:.4rem 0 0; font-size:.8rem; color:var(--muted); }
   .folders, .files { list-style:none; padding:0; margin:.5rem 0; }
   .folders li { background:var(--bg); border:1px solid var(--border); padding:.4em .6em; border-radius:10px; margin:.25em 0; display:flex; justify-content:space-between; align-items:center; gap:.5rem; min-width:0; }
   .truncate { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }

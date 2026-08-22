@@ -123,3 +123,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: Before/after emoji vs SVG + consistent UI video
 
+
+## 2026-08-23 04:27 IST — Add progress bar with real numbers + crash fix for bigger folders + uncle friendly light default
+- **What changed:** Add progress bar with real numbers + crash fix for bigger folders + uncle friendly light default
+- **Why decision:** Why: user said bigger folder crashes + add progress bars UX all sorts scanning showing real numbers + every open was dark unpolished + make content uncle friendly; fixed Rust: skip unreadable (not fail whole), cap 50K files / 20K candidates / 500 groups, sequential hashing with per-10 emit for smooth bar when has_progress, added ScanProgress struct + AppHandle emit scan-progress, frontend listen + progress bar (phase/scanned/total/percent/message) with Adwaita track, default to light (not system dark) for polish, header uncle friendly 'Find and clean — nothing deleted forever' + 'Find Duplicates' button
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Progress bar demo with real numbers + before/after dark fix + uncle friendly video
+

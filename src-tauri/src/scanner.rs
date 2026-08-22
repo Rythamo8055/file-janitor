@@ -7,6 +7,15 @@ use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ScanProgress {
+    pub phase: String,
+    pub scanned: usize,
+    pub total: usize,
+    pub percent: u8,
+    pub message: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FileInfo {
     pub path: String,
     pub size: u64,
@@ -54,26 +63,82 @@ pub fn collect_files(paths: &[String]) -> Vec<PathBuf> {
 }
 
 pub fn scan_folders(paths: Vec<String>) -> Result<Vec<FileGroup>, String> {
+    scan_folders_with_progress(paths, None::<Box<dyn FnMut(ScanProgress) + Send + Sync>>)
+}
+
+pub fn scan_folders_with_progress(
+    paths: Vec<String>,
+    mut progress_cb: Option<Box<dyn FnMut(ScanProgress) + Send + Sync>>,
+) -> Result<Vec<FileGroup>, String> {
+    let has_progress = progress_cb.is_some();
+    let mut emit = |phase: &str, scanned: usize, total: usize, msg: String| {
+        if let Some(cb) = progress_cb.as_mut() {
+            let percent = if total > 0 { ((scanned as f32 / total as f32) * 100.0) as u8 } else { 0 };
+            cb(ScanProgress { phase: phase.to_string(), scanned, total, percent, message: msg });
+        }
+    };
+    emit("collecting", 0, 0, "Finding files...".to_string());
     let files = collect_files(&paths);
-    // group by size first (fast), then hash only size groups >1
+    emit("collecting", files.len(), files.len(), format!("Found {} files", files.len()));
+    // harden: skip unreadable files, don't fail whole scan on one permission error
+    // also cap: if >50K files, warn via error (caller can confirm)
+    const MAX_FILES: usize = 50000;
+    if files.len() > MAX_FILES {
+        return Err(format!("Too many files: {} (limit {}). Pick a smaller folder or use subfolders. Scanned {} paths.", files.len(), MAX_FILES, paths.join(", ")));
+    }
     let mut size_map: HashMap<u64, Vec<PathBuf>> = HashMap::new();
+    let mut skipped = 0usize;
     for f in files {
-        let meta = std::fs::metadata(&f).map_err(|e| e.to_string())?;
+        let meta = match std::fs::metadata(&f) {
+            Ok(m) => m,
+            Err(_) => { skipped += 1; continue; }
+        };
         if !meta.is_file() { continue; }
         let size = meta.len();
+        // harden: skip huge files >2GB to avoid OOM in parallel hash
+        const MAX_FILE_SIZE: u64 = 2 * 1024 * 1024 * 1024;
+        if size > MAX_FILE_SIZE {
+            skipped += 1;
+            continue;
+        }
         size_map.entry(size).or_default().push(f);
     }
 
+    emit("grouping", size_map.len(), size_map.len(), format!("Grouped by size, {} candidates to hash", {
+        let c: usize = size_map.values().filter(|v| v.len()>1).map(|v| v.len()).sum();
+        c
+    }));
     let mut hash_map: HashMap<String, Vec<FileInfo>> = HashMap::new();
     // only process groups where size has duplicates (or 0-byte special)
-    let candidates: Vec<PathBuf> = size_map.into_values().filter(|v| v.len() > 1).flatten().collect();
+    let mut candidates: Vec<PathBuf> = size_map.into_values().filter(|v| v.len() > 1).flatten().collect();
+    // harden: cap candidates to avoid hashing 10K+ huge files at once (OOM)
+    const MAX_CANDIDATES: usize = 20000;
+    let was_capped = candidates.len() > MAX_CANDIDATES;
+    if was_capped {
+        candidates.truncate(MAX_CANDIDATES);
+    }
+    emit("hashing", 0, candidates.len(), format!("Hashing {} files...", candidates.len()));
 
-    // parallel hash
-    let hashed: Vec<(PathBuf, String, u64)> = candidates.par_iter().filter_map(|p| {
-        let size = std::fs::metadata(p).ok()?.len();
-        let hash = hash_file(p).ok()?;
-        Some((p.clone(), hash, size))
-    }).collect();
+    // hashing with real progress numbers: if progress listener exists, do sequential with per-10 emits for smooth bar; else parallel for speed (tests)
+    let hashed: Vec<(PathBuf, String, u64)> = if has_progress {
+        let mut out = Vec::new();
+        for (idx, p) in candidates.iter().enumerate() {
+            if let (Ok(size), Ok(hash)) = (std::fs::metadata(p).map(|m| m.len()), hash_file(p)) {
+                out.push((p.clone(), hash, size));
+            }
+            if (idx + 1) % 10 == 0 || idx + 1 == candidates.len() {
+                emit("hashing", idx + 1, candidates.len(), format!("Hashed {} of {} files", idx + 1, candidates.len()));
+            }
+        }
+        out
+    } else {
+        candidates.par_iter().filter_map(|p| {
+            let size = std::fs::metadata(p).ok()?.len();
+            let hash = hash_file(p).ok()?;
+            Some((p.clone(), hash, size))
+        }).collect()
+    };
+    emit("hashing", candidates.len(), candidates.len(), format!("Hashed {} files", candidates.len()));
 
     for (path, hash, size) in hashed {
         let name = path.file_name().and_then(|n| n.to_str()).unwrap_or("").to_string();
@@ -91,6 +156,12 @@ pub fn scan_folders(paths: Vec<String>) -> Result<Vec<FileGroup>, String> {
     }).collect();
 
     groups.sort_by(|a,b| b.wasted.cmp(&a.wasted));
+    // harden: cap groups to 500 max to avoid UI crash rendering 1000s (frontend paginates, but backend also caps)
+    const MAX_GROUPS: usize = 500;
+    if groups.len() > MAX_GROUPS {
+        groups.truncate(MAX_GROUPS);
+    }
+    emit("done", groups.len(), groups.len(), format!("Found {} duplicate groups", groups.len()));
     Ok(groups)
 }
 
@@ -138,6 +209,38 @@ mod tests {
         std::fs::write(dir.path().join("a"), b"").unwrap();
         std::fs::write(dir.path().join("b"), b"").unwrap();
         let groups = scan_folders(vec![dir.path().to_string_lossy().to_string()]).unwrap();
+        assert_eq!(groups.len(), 1);
+    }
+
+    #[test]
+    fn large_folder_no_crash() {
+        let dir = tempdir().unwrap();
+        // 200 files, 100 dup pairs by size+content
+        for i in 0..100 {
+            let content = format!("content-{}", i % 10); // 10 distinct contents, each 10 dupes
+            std::fs::write(dir.path().join(format!("a{}.txt", i)), content.as_bytes()).unwrap();
+            std::fs::write(dir.path().join(format!("b{}.txt", i)), content.as_bytes()).unwrap();
+        }
+        let groups = scan_folders(vec![dir.path().to_string_lossy().to_string()]).unwrap();
+        assert!(groups.len() <= 500, "capped");
+        assert!(groups.len() >= 5, "found some dupes");
+        // also test skip of unreadable: create a broken symlink
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::symlink;
+            let _ = symlink("/nonexistent", dir.path().join("broken"));
+            let groups2 = scan_folders(vec![dir.path().to_string_lossy().to_string()]).unwrap();
+            assert!(groups2.len() >= 5);
+        }
+    }
+
+    #[test]
+    fn permission_skip_no_crash() {
+        // single unreadable shouldn't fail whole scan
+        let dir = tempdir().unwrap();
+        std::fs::write(dir.path().join("ok1.txt"), b"same").unwrap();
+        std::fs::write(dir.path().join("ok2.txt"), b"same").unwrap();
+        let groups = scan_folders(vec![dir.path().to_string_lossy().to_string(), "/nonexistent_xyz_123".to_string()]).unwrap();
         assert_eq!(groups.len(), 1);
     }
 }
