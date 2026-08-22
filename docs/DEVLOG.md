@@ -95,3 +95,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: Devlog video - hashing demo + UI scan
 
+
+## 2026-08-23 03:48 IST — Fixed Tauri browser error + dark theme + UX
+- **What changed:** Fixed Tauri browser error + dark theme + UX
+- **Why decision:** Why: TypeError window.__TAURI_INTERNALS__ undefined in web preview (image 03:46 AM error) + user asked dark theme & UX friendly; fixed with isTauri guard, demo groups for web, theme toggle localStorage, CSS vars data-theme dark/light, banners, spinners, empty states
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: This fix screenshot + dark mode demo
+
