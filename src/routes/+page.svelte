@@ -90,6 +90,7 @@
   <meta name="description" content="File Janitor by Rythamo — the lightest offline duplicate finder (5-15MB, Tauri + Rust BLAKE3). No cloud, no subscription, 100% local. Find and clean duplicate files on Linux, Windows. Built research-first from 9,363 Reddit wishes." />
   <meta name="keywords" content="Rythamo, File Janitor, duplicate finder, offline, Tauri, Linux, Rythamo8055, file cleaner, BLAKE3" />
   <meta name="author" content="Rythamo" />
+  <meta name="google-site-verification" content="zOOj--hb4C2SawK-7BPeqrCavYMLjEHaIXc7wpvULZ8" />
   <link rel="canonical" href="https://offline-vault.vercel.app/" />
   <meta property="og:title" content="Rythamo — File Janitor" />
   <meta property="og:description" content="Lightweight offline duplicate finder by Rythamo. 5-15MB, Rust BLAKE3, trash not delete. Free forever." />

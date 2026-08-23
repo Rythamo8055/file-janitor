@@ -193,3 +193,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: sitemap.xml + robots.txt prerendered in build/
 
+
+## 2026-08-23 15:08 IST — Added Google Search Console verification meta tag
+- **What changed:** Added Google Search Console verification meta tag
+- **Why decision:** Why: user pasted google-site-verification tag from Search Console to verify https://offline-vault.vercel.app ownership, enables sitemap submit + request indexing for Rythamo SEO
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Google verified — Rythamo ranks in 24-48h
+
