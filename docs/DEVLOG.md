@@ -137,3 +137,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: Release notes + test results + monetization thread
 
+
+## 2026-08-23 12:07 IST — Make app free - no subscription, no paywall
+- **What changed:** Make app free - no subscription, no paywall
+- **Why decision:** Why: user said ew dont slam a subscription we make this app free; aligns with 7% anti-cloud rebellion (655/9363) + Linux OSS ethos + r/linux asks for simple free tools, not pay; keep free forever, optional donation only, matches Czkawka/dupeGuru free
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Free forever announcement + donation vs paywall thread
+
