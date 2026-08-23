@@ -179,3 +179,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: SEO Rythamo landing + anime procedural video
 
+
+## 2026-08-23 14:27 IST — Deployed Rythamo SEO landing + anime procedural to Vercel
+- **What changed:** Deployed Rythamo SEO landing + anime procedural to Vercel
+- **Why decision:** Why: user asked then do that thing complete all of those and also is my landing page deployed what is the link; rebuilt with Rythamo SEO title/meta/LD-JSON prerender true, anime 4.5 hero stagger + procedural canvas 3 blobs, deployed 331.4KB upload, Production https://offline-vault-lxx6gp25k-rythamos-projects.vercel.app aliased to https://offline-vault.vercel.app (200, 24s build iad1)
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Vercel live link + SEO Rythamo
+
