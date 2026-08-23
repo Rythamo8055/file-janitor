@@ -144,3 +144,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: Free forever announcement + donation vs paywall thread
 
+
+## 2026-08-23 12:12 IST — Add Win CI via GitHub Actions (Tauri Windows msi/nsis)
+- **What changed:** Add Win CI via GitHub Actions (Tauri Windows msi/nsis)
+- **Why decision:** Why: user said yes do win only via ci; added .github/workflows/win.yml with windows-latest + tauri-action, builds msi+exe on push to main, plus web build for free site; uses tauri v2, rust stable, node 24, cache
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Win CI demo + artifact download
+

@@ -154,3 +154,14 @@ This section was auto-generated from our timestamped convo via `scripts/log-prog
 
 This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
 
+
+---
+
+## Update 2026-08-23 12:12 IST — From Convo Log
+
+*Logged change:* ## 2026-08-23 12:12 IST — Add Win CI via GitHub Actions (Tauri Windows msi/nsis)
+*Total devlog entries:* 21
+*Source:* docs/DEVLOG.md + README Live Dev Log (time/day stamped)
+
+This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
+
