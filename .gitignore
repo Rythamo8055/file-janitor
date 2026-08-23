@@ -8,3 +8,4 @@ build/
 src-tauri/Cargo.lock
 .DS_Store
 .env
+.vercel
