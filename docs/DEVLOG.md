@@ -172,3 +172,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: Vercel live announcement + demo link
 
+
+## 2026-08-23 14:03 IST — Rythamo SEO landing + anime.js + procedural blobs
+- **What changed:** Rythamo SEO landing + anime.js + procedural blobs
+- **Why decision:** Why: user wants rank on Google for Rythamo, need landing with screenshots + impeccable + anime.js + procedural animation; added Rythamo SEO title/meta/keywords/LD-JSON, prerender true for landing (was ssr false overwrote index.html), fixed svelte.config fallback 200.html, added anime 4.5 animate+stagger for hero + features + progress bar + toast + procedural canvas 3 blobs drifting + pulse, fixed og-rythamo.png 404, build now 15K index.html with Rythamo head
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: SEO Rythamo landing + anime procedural video
+
