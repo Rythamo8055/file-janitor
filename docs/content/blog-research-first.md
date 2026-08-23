@@ -176,3 +176,14 @@ This section was auto-generated from our timestamped convo via `scripts/log-prog
 
 This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
 
+
+---
+
+## Update 2026-08-23 12:41 IST — From Convo Log
+
+*Logged change:* ## 2026-08-23 12:41 IST — Windows msi 5.3M + exe 3.6M verified + uploaded to release v0.1.0
+*Total devlog entries:* 23
+*Source:* docs/DEVLOG.md + README Live Dev Log (time/day stamped)
+
+This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
+

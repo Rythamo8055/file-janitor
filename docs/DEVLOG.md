@@ -158,3 +158,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: Linux binary demo install sudo dnf install deb + size proof
 
+
+## 2026-08-23 12:41 IST — Windows msi 5.3M + exe 3.6M verified + uploaded to release v0.1.0
+- **What changed:** Windows msi 5.3M + exe 3.6M verified + uploaded to release v0.1.0
+- **Why decision:** Why: user asked do we have msi or exe available for windows are they working tests all things; downloaded CI artifact 8.8M from 32623619637, verified msi is Composite Document MSI Installer + exe is PE32 Nullsoft, sizes 5.3M + 3.6M, uploaded to https://github.com/Rythamo8055/file-janitor/releases/tag/v0.1.0 alongside deb 6.8M + rpm 6.8M + web 80K, all tests 6/6 cargo + svelte-check 0 + detect 0 + Win build success = working
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Windows release demo install msi
+
