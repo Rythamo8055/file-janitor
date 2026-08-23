@@ -165,3 +165,14 @@ This section was auto-generated from our timestamped convo via `scripts/log-prog
 
 This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
 
+
+---
+
+## Update 2026-08-23 12:19 IST — From Convo Log
+
+*Logged change:* ## 2026-08-23 12:19 IST — Built Linux binary (deb + rpm 6.8M) + uploaded to release v0.1.0
+*Total devlog entries:* 22
+*Source:* docs/DEVLOG.md + README Live Dev Log (time/day stamped)
+
+This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
+

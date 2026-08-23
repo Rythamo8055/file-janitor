@@ -151,3 +151,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: Win CI demo + artifact download
 
+
+## 2026-08-23 12:19 IST — Built Linux binary (deb + rpm 6.8M) + uploaded to release v0.1.0
+- **What changed:** Built Linux binary (deb + rpm 6.8M) + uploaded to release v0.1.0
+- **Why decision:** Why: user asked do we developed binary file for linux or not; ran npm run tauri build on Fedora 44 (took 1m33s release), bundled deb 6.8M + rpm 6.8M + raw 23M ELF (not stripped), uploaded to https://github.com/Rythamo8055/file-janitor/releases/tag/v0.1.0 via gh release upload, verified cargo test 6/6 + vite build, AppImage failed linuxdeploy but deb/rpm sufficient for 5-15MB promise
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Linux binary demo install sudo dnf install deb + size proof
+
