@@ -165,3 +165,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: Windows release demo install msi
 
+
+## 2026-08-23 13:11 IST — Deployed to Vercel https://offline-vault.vercel.app
+- **What changed:** Deployed to Vercel https://offline-vault.vercel.app
+- **Why decision:** Why: user said i have already loged i just deploy; fixed .vercelignore (ignore src-tauri/target) + vercel.json, npx vercel --prod --yes built in 20s on iad1, 229.2KB upload, aliased to https://offline-vault.vercel.app, web preview now live (demo groups, no Rust, full Tauri needs deb/rpm/msi)
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Vercel live announcement + demo link
+
