@@ -89,9 +89,23 @@
   <title>Rythamo — File Janitor | Lightweight Offline Duplicate Finder 5-15MB</title>
   <meta name="description" content="File Janitor by Rythamo — the lightest offline duplicate finder (5-15MB, Tauri + Rust BLAKE3). No cloud, no subscription, 100% local. Find and clean duplicate files on Linux, Windows. Built research-first from 9,363 Reddit wishes." />
   <meta name="keywords" content="Rythamo, File Janitor, duplicate finder, offline, Tauri, Linux, Rythamo8055, file cleaner, BLAKE3" />
-  <meta name="author" content="Rythamo" />
+  <meta name="author" content="Vishnu Vardhan (Rythamo)" />
   <meta name="google-site-verification" content="zOOj--hb4C2SawK-7BPeqrCavYMLjEHaIXc7wpvULZ8" />
   <link rel="canonical" href="https://offline-vault.vercel.app/" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Vishnu Vardhan",
+      "alternateName": "Rythamo",
+      "url": "https://vishnuvardhanm.vercel.app",
+      "sameAs": [
+        "https://github.com/Rythamo8055",
+        "https://linkedin.com/in/vishnu-vardhan8055"
+      ],
+      "jobTitle": "AI Engineer & Fullstack Developer"
+    }
+  </script>
   <meta property="og:title" content="Rythamo — File Janitor" />
   <meta property="og:description" content="Lightweight offline duplicate finder by Rythamo. 5-15MB, Rust BLAKE3, trash not delete. Free forever." />
   <meta property="og:url" content="https://offline-vault.vercel.app/" />
