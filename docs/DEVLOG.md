@@ -130,3 +130,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: Progress bar demo with real numbers + before/after dark fix + uncle friendly video
 
+
+## 2026-08-23 12:01 IST — Tests all passed + GitHub release v0.1.0 + cross-platform ready
+- **What changed:** Tests all passed + GitHub release v0.1.0 + cross-platform ready
+- **Why decision:** Why: user asked do all kind of tests and make releases + tell how to get money + where to list + can we release to Win/Android/Web with all features; ran 6/6 cargo tests (large 200, permission skip), svelte-check 0, vite 172K, impeccable 1→0, stress 500 files 2M, created release v0.1.0 with web artifact, verified cross-platform Tauri v2 + web
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: Release notes + test results + monetization thread
+

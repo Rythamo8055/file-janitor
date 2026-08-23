@@ -132,3 +132,14 @@ This section was auto-generated from our timestamped convo via `scripts/log-prog
 
 This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
 
+
+---
+
+## Update 2026-08-23 12:01 IST — From Convo Log
+
+*Logged change:* ## 2026-08-23 12:01 IST — Tests all passed + GitHub release v0.1.0 + cross-platform ready
+*Total devlog entries:* 19
+*Source:* docs/DEVLOG.md + README Live Dev Log (time/day stamped)
+
+This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
+
