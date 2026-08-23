@@ -186,3 +186,10 @@ Next expected entries: `2026-08-23 03:xx - PLAN tasks/todo.md`, `... - Implement
 - **Convo source:** logged via scripts/log-progress.sh from agent convo
 - **Content angle:** Content: Vercel live link + SEO Rythamo
 
+
+## 2026-08-23 14:53 IST — Added sitemap.xml + robots.txt for Google indexing
+- **What changed:** Added sitemap.xml + robots.txt for Google indexing
+- **Why decision:** Why: user asked how to get indexed by Google, sitemap + robots.txt submitted to Google Search Console triggers crawl, Rythamo unique name ranks fast
+- **Convo source:** logged via scripts/log-progress.sh from agent convo
+- **Content angle:** Content: sitemap.xml + robots.txt prerendered in build/
+

@@ -220,3 +220,14 @@ This section was auto-generated from our timestamped convo via `scripts/log-prog
 
 This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
 
+
+---
+
+## Update 2026-08-23 14:53 IST — From Convo Log
+
+*Logged change:* ## 2026-08-23 14:53 IST — Added sitemap.xml + robots.txt for Google indexing
+*Total devlog entries:* 27
+*Source:* docs/DEVLOG.md + README Live Dev Log (time/day stamped)
+
+This section was auto-generated from our timestamped convo via `scripts/log-progress.sh` → `generate-content-from-convo.sh` (skills: research + spec-driven). No content gap.
+
